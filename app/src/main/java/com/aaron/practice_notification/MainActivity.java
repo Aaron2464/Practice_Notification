@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String description = "渠道描述1";
         String channelId = "channelId1";        //渠道id
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        Notification.Builder builder;
+        NotificationCompat.Builder builder;                         // NotificationCompat.Builder V.S.   Notification.Builder
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //創建通知渠道
             int importance = NotificationManager.IMPORTANCE_HIGH;       //重要性級別
@@ -49,15 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mChannel.setDescription(description);   //渠道描述
             mChannel.enableLights(true);            //是否顯示通知指示燈
             mChannel.enableVibration(true);         //是否振動
-            builder = new Notification.Builder(this, channelId)
+            builder = new NotificationCompat.Builder(this, channelId)
                     .setSmallIcon(R.drawable.run)           // small icon must be png, and background must be transparent.
                     .setContentTitle(title)
                     .setContentText(content)
-                    .setChannelId(channelId);
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(" NotificationCompat.Builder  Notification.Builder 的差別就是能不能支持 setStyle"))
+                    .setChannelId(channelId)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             notificationManager.createNotificationChannel(mChannel);//創建通知渠道
             notificationManager.notify(new Random().nextInt(), builder.build());
         } else {
-            builder = new Notification.Builder(this)
+            builder = new NotificationCompat.Builder(this, channelId)
                     .setSmallIcon(R.drawable.run)
                     .setContentTitle(title)
                     .setContentText(content);
